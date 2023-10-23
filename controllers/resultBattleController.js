@@ -1,16 +1,21 @@
 import db from "../configs/mysql-connect.js";
+import { errorServer } from "../utils/errorRespon.js";
 
 export const addNewResultBattle = (req, res) => {
   const { body } = req;
-  db.query(
-    `CALL add_new_user('${body.status}','${body.durasi}','${
-      body.mode
-    }','${JSON.stringify(body.detail)}')`,
-    (err, results) => {
-      res.status(201).json({
-        status: "success",
-        payload: results,
-      });
-    }
-  );
+  try {
+    db.query(
+      `CALL add_result_battle("${body.status}","${body.durasi}","${
+        body.mode
+      }",'${JSON.stringify(body.detail)}')`,
+      (err, results) => {
+        res.status(201).json({
+          status: "success",
+          payload: results,
+        });
+      }
+    );
+  } catch (error) {
+    errorServer(res, error);
+  }
 };
