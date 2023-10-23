@@ -25,15 +25,19 @@ export const addNewUser = (req, res) => {
 
 export const editUsername = (req, res) => {
   const { body } = req;
-  db.query(
-    `CALL add_new_user('${body.old_name}','${body.new_name}')`,
-    (err, results) => {
-      res.status(200).json({
-        status: "success",
-        payload: results,
-      });
-    }
-  );
+  try {
+    db.query(
+      `CALL add_new_user('${body.old_name}','${body.new_name}')`,
+      (err, results) => {
+        res.status(200).json({
+          status: "success",
+          payload: results,
+        });
+      }
+    );
+  } catch (error) {
+    res.status(500).json({});
+  }
 };
 export const deleteUserByName = (req, res) => {
   const { body } = req;
